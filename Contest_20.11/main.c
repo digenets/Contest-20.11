@@ -28,14 +28,14 @@ int pow(int x, int y);
 int count_of_linebreaks(FILE* inp);
 
 int main(){
-    FILE * inp = fopen("/home/datsky-prince/CLionProjects/Contest_20.11/input.txt", "rt");
-    FILE * out = fopen("/home/datsky-prince/CLionProjects/Contest_20.11/output.txt", "wt");
+    FILE * inp = fopen("input.txt", "rt");
+    FILE * out = fopen("output.txt", "wt");
     struct stack *head;
     head = NULL;
     char string[1000] = {0};
     char team_name[100] = {0};
     int number_of_lines_1 = count_of_linebreaks(inp) + 1;
-    inp = fopen("/home/datsky-prince/CLionProjects/Contest_20.11/input.txt", "rt");
+    inp = fopen("input.txt", "rt");
 //    head = create(head);
 
     for (int i = 0; i<number_of_lines_1-1; i++){
@@ -200,12 +200,12 @@ int main(){
     }
     fclose(inp);
     fclose(out);
-    out = fopen("/home/datsky-prince/CLionProjects/Contest_20.11/output.txt", "rt");
+    out = fopen("output.txt", "rt");
     char arr[1000][1000] = {0};
     int j = 0;
     char symb = 0;
     int number_of_lines2 = count_of_linebreaks(out)+1;
-    out = fopen("/home/datsky-prince/CLionProjects/Contest_20.11/output.txt", "rt");
+    out = fopen("output.txt", "rt");
     for (int i = 0; i < number_of_lines2-1; i++){
         j = 0;
         symb = 0;
@@ -216,7 +216,7 @@ int main(){
         }
     }
     fclose(out);
-    out = fopen("/home/datsky-prince/CLionProjects/Contest_20.11/output.txt", "wt");
+    out = fopen("output.txt", "wt");
     j=0;
     for (int i = number_of_lines2-1 ; i >= 0; i--){
         fputs(arr[i], out);
