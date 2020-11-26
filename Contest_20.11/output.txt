@@ -1,0 +1,8 @@
+Barselona 1 0 0 1 3 39 1
+Spartak 1 1 0 1 0 25 1
+Liverpool 1 0 0 1 16 45 1
+Uventus 1 1 1 0 45 16 1
+Dinamo 2 1 2 0 62 21 2
+Real 1 1 0 1 18 23 1
+Manchester 1 0 0 1 24 29 1
+Chelsea 2 1 2 0 54 24 2
