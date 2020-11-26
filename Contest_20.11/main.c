@@ -17,12 +17,13 @@ struct stack{
         goals,
         fallGoals,
         fighters;
+    char rivals[SIZE1];
     struct stack *next;
 };
 
 struct stack *create (struct stack *head);
-struct stack *create1(struct stack *head, bool IsTeam1Won, bool IsDraw, int team1_count, int team2_count, char* name);
-struct stack *create2(struct stack *head, bool IsTeam2Won, bool IsDraw, int team1_count, int team2_count, char* name);
+struct stack *create1(struct stack *head, bool IsTeam1Won, bool IsDraw, int team1_count, int team2_count, char* name1, char* name2);
+struct stack *create2(struct stack *head, bool IsTeam2Won, bool IsDraw, int team1_count, int team2_count, char* name1, char* name2);
 int pow(int x, int y);
 int count_of_linebreaks(FILE* inp);
 
@@ -109,20 +110,24 @@ int main(){
             temp = temp->next;
         }
         if (!struct_with_such_team1_exists){
-            head = create1(head, IsTeam1Won, IsDraw, team1_count, team2_count, team1_name);
+            head = create1(head, IsTeam1Won, IsDraw, team1_count, team2_count, team1_name, team2_name);
         }
         else if (struct_with_such_team1_exists){
             temp->goals     += team1_count;
             temp->homeGames ++;
-            if (strcmp(team1_name, team2_name) != 0){ // если неодинаковые
-                temp->fighters ++;
-            }
             temp->fallGoals += team2_count;
             if (IsTeam1Won)
                 temp->wonGames ++;
             else if (!IsDraw)
                 temp->fallGames++;
             temp->games += 1;
+            bool such_rival_exist = 0;
+            such_rival_exist = strstr(temp->rivals, team2_name)?1:0;
+            if (!such_rival_exist) {
+                temp->fighters++;
+                strcat(temp->rivals, team2_name);
+                strcat(temp->rivals, " ");
+            }
         }
 
         temp = head;
@@ -134,7 +139,7 @@ int main(){
             temp = temp->next;
         }
         if (!struct_with_such_team2_exists){
-            head = create2(head, IsTeam2Won, IsDraw, team1_count, team2_count, team2_name);
+            head = create2(head, IsTeam2Won, IsDraw, team1_count, team2_count, team1_name, team2_name);
         }
         else{
             if (IsTeam2Won)
@@ -142,11 +147,15 @@ int main(){
             else if (!IsDraw)
                 temp->fallGames ++;
             temp->games ++;
-            if (strcmp(team1_name, team2_name) != 0){ // если неодинаковые
-                temp->fighters ++;
-            }
             temp->goals += team2_count;
             temp->fallGoals += team1_count;
+            bool such_rival_exist = 0;
+            such_rival_exist = strstr(temp->rivals, team1_name)?1:0;
+            if (!such_rival_exist) {
+                temp->fighters++;
+                strcat(temp->rivals, team1_name);
+                strcat(temp->rivals, " ");
+            }
         }
     }
     while(head != NULL)
@@ -165,7 +174,24 @@ int main(){
         fputc(' ', out);
         fprintf(out, "%d", head->fallGoals);
         fputc(' ',out);
-        fprintf(out, "%d", head->fighters);
+        strcat(head->rivals, "\0");
+        char cur1 =0;
+        int i = 0;
+        while (head->rivals[i] == ' ' && head->rivals[i] != '\0')
+            i++;
+        int slovo = 0;
+        int count = 0;
+        while (head->rivals[i] != '\0') {
+            if (head->rivals[i] != ' ' && slovo == 0)
+            {
+                slovo = 1;
+                count++;
+            }
+            else if (head->rivals[i] == ' ')
+                slovo = 0;
+            i++;
+        }
+        fprintf(out, "%d", count);
         fputc('\n', out);
         struct stack* temp;
         temp = head;
@@ -195,6 +221,7 @@ int main(){
     for (int i = number_of_lines2-1 ; i >= 0; i--){
         fputs(arr[i], out);
     }
+
     return 0;
 }
 
@@ -206,7 +233,7 @@ struct stack *create(struct stack *head) {
     return element;
 }
 
-struct stack *create1(struct stack *head, bool IsTeam1Won, bool IsDraw, int team1_count, int team2_count, char* teamname) {
+struct stack *create1(struct stack *head, bool IsTeam1Won, bool IsDraw, int team1_count, int team2_count, char* team1name, char* team2name) {
     struct stack *element; // указатель на новую структуру
     element = (struct stack *)malloc(sizeof(struct stack)); // выделяем память
     element->next      = head;
@@ -217,11 +244,13 @@ struct stack *create1(struct stack *head, bool IsTeam1Won, bool IsDraw, int team
     element->fallGoals = team2_count;
     element->fighters  = 1;
     element->homeGames = 1;
-    strcpy(element->name, teamname);
+    strcpy(element->name, team1name);
+    strcat(element->rivals, team2name);
+    strcat(element->rivals, " ");
     return element;
 }
 
-struct stack *create2(struct stack *head, bool IsTeam2Won, bool IsDraw, int team1_count, int team2_count, char* teamname) {
+struct stack *create2(struct stack *head, bool IsTeam2Won, bool IsDraw, int team1_count, int team2_count, char* team1name, char* team2name) {
     struct stack *element; // указатель на новую структуру
     element = (struct stack *) malloc(sizeof(struct stack)); // выделяем память
     element->next = head;
@@ -232,7 +261,9 @@ struct stack *create2(struct stack *head, bool IsTeam2Won, bool IsDraw, int team
     element->fallGoals = team1_count;
     element->fighters = 1;
     element->homeGames = 0;
-    strcpy(element->name, teamname);
+    strcpy(element->name, team2name);
+    strcat(element->rivals, team1name);
+    strcat(element->rivals, " ");
     return element;
 }
 

@@ -1,3 +1,3 @@
-Bavaria 2 1 0 1 29 48 2
-Manchester 3 1 1 0 58 39 3
+Bavaria 2 1 0 1 29 48 1
+Manchester 3 1 1 0 58 39 2
 Uventus 1 1 0 0 10 10 1
